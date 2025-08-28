@@ -296,7 +296,7 @@ summ_by_heat <- function(df, high_heat_flag) {
       districts            = n(),
       students             = sum(enrollment_total, na.rm = TRUE),
       total_gap            = sum(uplift, na.rm = TRUE),
-      per_student_ratio_of_sums = total_gap / students,                # <<< RECOMMEND THIS
+      per_student_ratio_of_sums = total_gap / students,                
       mean_ratio                = mean(uplift / enrollment_total, na.rm = TRUE),
       median_ratio              = median(uplift / enrollment_total, na.rm = TRUE),
       per_district_mean         = mean(uplift, na.rm = TRUE),
