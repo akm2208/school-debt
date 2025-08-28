@@ -67,6 +67,10 @@ save_gt <- function(gtobj, stem){ # so this makes the prettiest tables the only 
   invisible(htm)
 }
 
+save_csv <- function(df, name) {
+  readr::write_csv(df, file = file.path("out", "csv", paste0(name, ".csv")))
+}
+
 # ==============================
 # 2. loading data
 # ==============================
@@ -150,12 +154,16 @@ df_strict <- df %>% filter(!is.na(z_fiscal), !is.na(z_social), !is.na(z_climate)
 thr_tv    <- quantile(df_strict$triple_vulnerability, cfg$HOTSPOT_Q, na.rm=TRUE) #all this ensures the composite has all three components or it gets dropped
 df_strict <- df_strict %>% mutate(hotspot = triple_vulnerability >= thr_tv) #i call it df STRICT 
 
-save_csv(df_strict, "district_metrics_scored") # has a Boolean column that says yes or no to hotspot
+readr::write_csv(df_strict, "out/csv/district_metrics_scored.csv") # has a Boolean column that says yes or no to hotspot
 
 # ==============================
 # 4) SUMMARY TABLES (auto-print + save)
 # ==============================
 # Top 50 triple-vulnerable
+top50 <- df_strict %>%
+  arrange(desc(triple_vulnerability)) %>%
+  slice_head(n = 50)
+
 top50 %>%  
   select(district_name, GeoId, enrollment_total,
          debt_per_student, z_fiscal, z_social, z_climate,
